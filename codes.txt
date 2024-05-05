@@ -1,0 +1,141 @@
+; add 2 16 bit no
+MOV AX,1234H 
+MOV BX,1236H 
+ADD AX,BX 
+HLT
+
+; subtract 2 16 bit no
+MOV AX,1234H 
+MOV BX,1236H 
+SUB AX,BX 
+HLT
+
+; multiply 2 16 bit no
+MOV AX,[0301H] 
+MOV BX,[0303H] 
+MUL BX
+HLT
+
+; divide 2 16 bit no
+MOV AX,[0301H] 
+MOV BX,[0303H] 
+DIV BX
+HLT
+
+; demonstrate AAA, AAS, AAM, AAD, DAA and DAS 
+MOV AX,0032H
+MOV BX,0033H
+ADD AX,BX
+AAA
+HLT
+
+MOV AL,0033H
+SUB AX,0039H
+AAS
+OR AL,0030H
+HLT
+
+MOV AL,03H
+MOV BL,09H
+MUL BL
+AAM
+OR AX,3030H
+HLT
+
+MOV AX,0033H
+MOV BX,0032H
+AAD
+DIV BX
+HLT
+
+MOV AL,71H
+ADD AL,43H'
+DAA
+HLT
+
+MOV AL,71H
+SUB AL,43H'
+DAS
+HLT
+
+; pos, neg no. count
+MOV CL,0AH 
+MOV BL,00H 
+MOV DL,00H 
+LEA SI, [1000H] 
+L1: MOV AL, [SI]
+SHL AL, 01
+JNC L2
+INC DL 
+JMP L3 
+L2: INC BL 
+L3: INC SI 
+DEC CL 
+JNZ L1
+MOV [100AH], BL 
+MOV [100BH], DL 
+HLT
+
+; largest no from 8bit
+MOV CL, 0AH 
+LEA SI, [1000H] 
+MOV AL, [SI] 
+L1: INC SI 
+MOV BL, [SI] 
+CMP AL, BL
+JC L2 
+JMP L3
+L2: MOV AL, BL 
+L3: DEC CL
+JNZ L1
+MOV [100AH], AL 
+HLT
+
+; largest no from 16bit
+MOV BX, 1000H 
+MOV CL, [BX] 
+INC BX
+MOV AX, [BX] 
+DEC CL
+Back: INC BX 
+INC BX
+CMP AX, [BX]
+JNC Next 
+MOV AX, [BX] 
+Next: DEC CL 
+JNZ Back
+MOV [1020H], AX 
+HLT
+
+;fibonacci
+MOV SI, 3000H 
+MOV CX, 0AH 
+XOR AL, AL 
+MOV [SI], 0AH 
+INC SI
+MOV [SI], 00H 
+ADD AL, 01H 
+INC SI
+MOV [SI], AL 
+Back: ADD AL, [SI] 
+INC SI
+MOV [SI], AL 
+DEC SI
+MOV AL, [SI] 
+INC SI
+LOOP Back 
+HLT
+
+; 15/6 using ascii result in DX
+MOV AX,’15’ 
+MOV BX, ‘6’ 
+SUB AX, 3030H 
+SUB BH, 30H 
+AAD
+DIV BH
+ADD AX, 3030H 
+MOV [SI], AX 
+HLT
+
+
+
